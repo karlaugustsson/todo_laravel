@@ -77,6 +77,17 @@ return [
             'prefix' => '',
             'schema' => 'public',
         ],
+        'mongodb' => array(
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'todo'),
+            'username' => env('DB_USERNAME', 'todoUserAdmin'),
+            'password' => env('DB_PASSWORD', 'password'),
+            'options' => array(
+                'db' => 'admin' // sets the authentication database required by mongo 3
+            )
+        ),
 
     ],
 

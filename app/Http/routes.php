@@ -1,5 +1,6 @@
 <?php
-
+use App\Todo;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,6 +12,32 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get("/" , function(Request $request){
+
+	$todos = Todo::orderBy("created_at" , "asc")->get();
+
+	return view('todos',['todos' => $todos]);
 });
+
+Route::post("/todo",function(Request $request){
+$validator = Validator::make($request->all(),
+	['name' => 'required|max:225']
+	);
+
+	if ($validator->fails()){
+		return redirect("/")->withInput()->withErrors($validator);
+	}
+	$todo = new Todo;
+	$todo->name = $request->name;
+	$todo->save();
+
+	return redirect("/");
+});
+
+Route::delete('/todo/{todo}', function (Todo $todo) {
+
+    $todo->delete();
+
+    return redirect('/');
+});
+
