@@ -1,6 +1,6 @@
 <?php
-use App\Todo;
-use Illuminate\Http\Request;
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,11 +12,11 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::resource("user" , 'UserController'); 
 
-Route::resource("todos" , "TodosController");
-Route::group(array('prefix' => 'api/v1'), function()
+Route::group(array('prefix' => 'api/v1/' , 'middleware' =>['setResponse' ]), function()
     {
-   		Route::resource("todos" , "TodosController");     
-    
+   		Route::resource("user" , 'UserController'); 
+   
 	});
 
