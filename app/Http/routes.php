@@ -1,6 +1,10 @@
 <?php
+use App\Http\Requests;
+use App\Http\Requests\StoreUserPostRequest;
+use Illuminate\Http\Request;
+use App\User;
 
-
+//use Illuminate\Http\Response;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,13 +16,17 @@
 |
 */
 
-Route::resource("user" , 'UserController'); 
 
-Route::group(array('prefix' => 'api/v1/' , 'middleware' =>['setResponse' ]), function()
+Route::group(array('prefix' => 'api/v1/'), function()
     {
-   		Route::get('users', ['uses' => 'UserController@index']);
-   		Route::get('user/{id}', ['uses' => 'UserController@show']);
-   		Route::post('user', ['uses' => 'UserController@store']);
-   
+
+		
+		Route::get('users/{sort?}', "UserApiController@index");
+		Route::get('user/{id}/',"UserApiController@show");
+   		
+   		Route::post('user',"UserApiController@store");
+   		Route::patch('user/{id}',"UserApiController@update");
+   		Route::delete('user/{id}',"UserApiController@destroy");
+
 	});
 

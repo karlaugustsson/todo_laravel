@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
-
+use Validator;
+use Illuminate\Http\Response;
 class StoreUserPostRequest extends Request
 {
     /**
@@ -12,8 +13,11 @@ class StoreUserPostRequest extends Request
      * @return bool
      */
     public function authorize()
-    {
+    {   
+
+ 
         return true;
+
     }
 
     /**
@@ -23,10 +27,23 @@ class StoreUserPostRequest extends Request
      */
     public function rules()
     {
-        return  [
+     
+        $rules = [
             'name' => "required|min:3|max:40",
             'email' => "required|unique:users|Email|max:160",
             'password' => "required"
             ];
-    }
+
+        if(Request::isMethod('patch')) {
+
+        $rules = [
+            'name' => "required|min:3|max:40",
+            'email' => "unique:users|Email|max:160"
+            ];
+            
+        }
+
+    return $rules;
+}
+
 }

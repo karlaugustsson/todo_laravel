@@ -13,55 +13,71 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
 
-	public function index(Request $request){
+	// public function index(Request $request){
 	
-	$users = User::all();
+	// $users = User::all();
 	
-	if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
-			return "placeholder for user index view";
-	}
 
-	return $users;
+	// return $users;
 
-	}
-	public function show($id){
+	// }
+	// public function show($id, Request $request,$format = null){
 
-		$user = User::findOrFail($id);
+	// 	$user = User::findOrFail($id);
 		
-		if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
-			return "placeholder for user show view";
-	}
+	// 	if($request->header("Content-Type") == "text/html" && $format == null || $request->header("Content-Type") == null && $format == null){
+	// 		return "placeholder for user show view";
+	// }
 
-
-		return $user;
-
-	}
-	public function create(){
-			$user = User::new();
-			if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
-			return "placeholder for user index view";
-			}
-			return $user;
-
-	}
-	public function store(StoreUserPostRequest $request){
+	// 	$response = new Response();
 		
-		$user = new User($request->all());
+	// 	return response($user,200)->header("Content-type","text/xml");
+
+	// }
+	// public function create(){
+	// 		$user = User::new();
+	// 		if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
+	// 		return "placeholder for user create view";
+	// 		}
+
+	// 		return $user;
+
+	// }
+	// public function store(StoreUserPostRequest $request){
+		
+	// 	$user = new User($request->all());
 	
-		$user->save();
+	// 	$user->save();
 
-	}
-	public function edit(){
+	// }
+	// public function edit(){
 
-	}
-	public function update(){
+	// }
+	// public function update(INT $id,StoreUserPostRequest $request){
 
-	}
-	public function destroy(){
+	// 	$user = User::findOrFail($id);
+		
+	// 	$user->name = $request->name;
 
-	}
-	public function delete(){
+	// 	if($request->email){
+	// 		$user->email = $request->email;
+	// 	}
 
-	}
+	// 	if($request->password){
+	// 		$user->password = $request->password;
+	// 	}
+
+	// 	$user->save();
+	// }
+	// public function destroy($id){
+
+	// 	$user = User::find($id);
+	
+	// 	$user->delete($id);
+
+	// }
+	// public function delete(){
+
+	// }
 
 }
