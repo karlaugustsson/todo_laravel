@@ -1,6 +1,5 @@
 <?php
 use App\Http\Requests;
-use App\Http\Requests\StoreUserPostRequest;
 use Illuminate\Http\Request;
 use App\User;
 
@@ -20,12 +19,14 @@ use App\User;
 Route::group(array('prefix' => 'api/v1/'), function()
     {
 
-		
+		Route::post("login" ,"ApiUserLogin@login");
+
+
 		Route::get('users/{sort?}', "UserApiController@index");
 		Route::get('user/{id}/',"UserApiController@show");
    		
    		Route::post('user',"UserApiController@store");
-   		Route::patch('user/{id}',"UserApiController@update");
+   		Route::patch('user',"UserApiController@update");
    		Route::delete('user/{id}',"UserApiController@destroy");
 
 	});

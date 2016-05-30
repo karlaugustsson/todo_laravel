@@ -9,7 +9,8 @@ use App\Http\Controllers\Route;
 use App\User;
 use Auth;
 use Illuminate\Http\Response;
-
+use Tymon\JWTAuth\Exceptions\JWTException;
+use JWTAuth;
 
 class UserApiController extends Controller
 {
@@ -46,6 +47,7 @@ class UserApiController extends Controller
 	public function store(Request $request){
 		
 		$user = new User($request->all());
+		$user->password = bcrypt($request->password);
 
 	
 		$user->save();
@@ -53,11 +55,25 @@ class UserApiController extends Controller
 
 	}
 
-	public function update(Request $request , $id){
+	public function update(Request $request){
+			try {
+				$token = $request->user_token;
+				if(!$user = JWTAuth::parseToken()->authenticate() ){
+					return response()->json(['user_not_found'], 404);
+				}
+			    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
-			$user = User::find($id);
+        return response()->json(['token_expired'], $e->getStatusCode());
 
-			if($user != null){
+    } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+        return response()->json(['token_invalid'], $e->getStatusCode());
+
+    } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+        return response()->json(['token_absent'], $e->getStatusCode());
+
+    }
 				$user->name = $request->name;
 
 				if($request->email){
@@ -65,12 +81,9 @@ class UserApiController extends Controller
 				}
 
 				if($request->password){
-					$user->password = $request->password;
+					$user->password = bcrypt($request->password);
 				}		
-			}else{
-				return response(array("errors" => ["No user with provided id was found nothing got updated"]),404)->header("Content-type","text/json");
-			}
-			
+
 			$user->save();
 			return response($user,200)->header("Content-Type","application/json");
 	}
