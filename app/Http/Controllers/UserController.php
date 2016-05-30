@@ -18,7 +18,7 @@ class UserController extends Controller
 	$users = User::all();
 	
 	if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
-
+			return "placeholder for user index view";
 	}
 
 	return $users;
@@ -27,11 +27,21 @@ class UserController extends Controller
 	public function show($id){
 
 		$user = User::findOrFail($id);
+		
+		if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
+			return "placeholder for user show view";
+	}
+
 
 		return $user;
 
 	}
 	public function create(){
+			$user = User::new();
+			if($request->header("Content-Type") == "text/html"|| $request->header("Content-Type") == null ){
+			return "placeholder for user index view";
+			}
+			return $user;
 
 	}
 	public function store(StoreUserPostRequest $request){

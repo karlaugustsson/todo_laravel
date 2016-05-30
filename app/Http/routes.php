@@ -16,7 +16,9 @@ Route::resource("user" , 'UserController');
 
 Route::group(array('prefix' => 'api/v1/' , 'middleware' =>['setResponse' ]), function()
     {
-   		Route::resource("user" , 'UserController'); 
+   		Route::get('users', ['uses' => 'UserController@index']);
+   		Route::get('user/{id}', ['uses' => 'UserController@show']);
+   		Route::post('user', ['uses' => 'UserController@store']);
    
 	});
 
