@@ -28,7 +28,7 @@ class User extends Authenticatable
         return $this->hasMany("App\Schema");
     }
     public function subscribed_schemas(){
-        return $this->belongsToMany('App\Schema')->withPivot('schema_id', 'user_id');
+        return $this->belongsToMany('App\Schema');
     }
     public function isAdmin()
     {

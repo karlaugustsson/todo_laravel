@@ -9,7 +9,7 @@ class Schema extends Model
 		return $this->belongsTo("App\User");
 	}
     public function subscribed_users(){
-        return $this->belongsToMany('App\User')->withPivot('user_id', 'schema_id');
+        return $this->belongsToMany('App\User');
     }
     protected $hidden = [
         'user_id'
