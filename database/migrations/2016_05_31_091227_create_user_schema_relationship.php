@@ -12,7 +12,7 @@ class CreateUserSchemaRelationship extends Migration
      */
     public function up()
     {
-        Schema::create("user_schemas",function(Blueprint $table){
+        Schema::create("schema_user",function(Blueprint $table){
             $table->integer("user_id")->unsigned()->nullable();
             $table->integer("schema_id")->unsigned()->nullable();
 

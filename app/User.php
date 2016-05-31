@@ -21,10 +21,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token',"admin"
     ];
 
-    public function user(){
-        return $this->hasMany("App/schema");
+    public function schemas(){
+        return $this->hasMany("App\Schema");
+    }
+    public function subscribed_schemas(){
+        return $this->belongsToMany('App\Schema')->withPivot('schema_id', 'user_id');
+    }
+    public function isAdmin()
+    {
+        return ($this->admin);
     }
 }

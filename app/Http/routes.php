@@ -19,8 +19,14 @@ use App\User;
 Route::group(array('prefix' => 'api/v1/'), function()
     {
 
-		Route::post("login" ,"ApiUserLogin@login");
+		Route::post("authorize" ,"ApiUserLogin@login");
 
+		Route::get("user/schemas/{sort?}/{limit?}/{offset?}" , "SchemaApiController@index");
+		Route::get("user/schema/{id}" , "SchemaApiController@show");
+		
+		Route::patch("user/schema/{id}" , "SchemaApiController@update");
+		Route::post("user/schema" , "SchemaApiController@store");
+		Route::delete("user/schema/{id}" , "SchemaApiController@destroy");
 
 		Route::get('users/{sort?}/{limit?}/{offset?}', "UserApiController@index");
 		Route::get('user/{id}/',"UserApiController@show");
@@ -28,6 +34,8 @@ Route::group(array('prefix' => 'api/v1/'), function()
    		Route::post('user',"UserApiController@store");
    		Route::patch('user',"UserApiController@update");
    		Route::delete('user',"UserApiController@destroy");
+
+
 
 	});
 

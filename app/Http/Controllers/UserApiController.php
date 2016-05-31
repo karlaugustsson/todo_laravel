@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Route; 
 use App\User;
 use Illuminate\Http\Response;
+use App\Http\Controllers\UserAuth;
 use JWTAuth;
 
 class UserApiController extends Controller
@@ -16,7 +17,8 @@ class UserApiController extends Controller
 		//$this->middleware(["jwt.auth","jwt.refresh"] ,["except" => "store"]);
 
 		$this->middleware("user_validation" , ["only" => ["update","store"]]);
-		
+        
+        $this->middleware("user_auth");	
 	}
 
 	public function index(Request $request , $sort = null, $limit = null , $offset = null){
@@ -36,7 +38,7 @@ class UserApiController extends Controller
 				
 				}
 
-				$users = $users->get();
+				$users = $users->take(20)->get();
 
 		
 			}else{
@@ -51,11 +53,12 @@ class UserApiController extends Controller
 
 		$user = User::find($id);
 
-		if($user != null ){
-			return response($user,200)->header("Content-type","text/json");	
+		if( $user ){
+			
+			return response()->json($user,200);	
 		}
 		
-		return response(array("errors" => ["No user with provided id was found"]),404)->header("Content-type","text/json");
+		return response()->json(["errors" => "No user with provided id was found"],404);
 
 	}
 
@@ -72,7 +75,9 @@ class UserApiController extends Controller
 
 	public function update(Request $request){
 			
-				$user = $this->getAuthenticatedUser();
+				$user = UserAuth::getAuthenticatedUser();
+				
+
 				$user->name = $request->name;
 
 				if($request->email){
@@ -88,20 +93,12 @@ class UserApiController extends Controller
 	}
 	public function destroy(Request $request){
 
-		$user = $this->getAuthenticatedUser();
-		if($user != null){
-			$user->delete($id);
-			return response()->json($user,200);
-		}else{
-			return response()->json(array("errors" => ["no user found with that id, nothing got deleted"]),404);
+		$user = UserAuth::getAuthenticatedUser();
+
+
+		$user->delete();
+
+		return response()->json($user,200);
 		}
 
-	}
-public function getAuthenticatedUser()
-{
-
- $user = User::find(1)->first();
-
- return $user;
-}
 }
