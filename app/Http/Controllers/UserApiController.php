@@ -7,27 +7,42 @@ use App\Http\Requests\StoreUserPostRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Route; 
 use App\User;
-use Auth;
 use Illuminate\Http\Response;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
 
 class UserApiController extends Controller
 {
 	public function __construct(){
+		//$this->middleware(["jwt.auth","jwt.refresh"] ,["except" => "store"]);
+
 		$this->middleware("user_validation" , ["only" => ["update","store"]]);
+		
 	}
 
 	public function index(Request $request , $sort = null, $limit = null , $offset = null){
 			
 			if($sort != null && strtoupper($sort) == "ASC" || strtoupper($sort) == "DESC"){
 		
-				$users = User::orderBy('id' ,$sort)->get();
+				$users = User::orderBy('id' ,$sort);
+				
+				if( $limit != null ){
+
+				$users->take((int) $limit);
+				
+				}
+				if( $offset != null ){
+
+				$users->skip((int) $offset);
+				
+				}
+
+				$users = $users->get();
+
 		
 			}else{
 				$users = User::all();
 			}
- 			
+
 
  			return response($users,200)->header("Content-Type","application/json");
 
@@ -56,24 +71,8 @@ class UserApiController extends Controller
 	}
 
 	public function update(Request $request){
-			try {
-				$token = $request->user_token;
-				if(!$user = JWTAuth::parseToken()->authenticate() ){
-					return response()->json(['user_not_found'], 404);
-				}
-			    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-        return response()->json(['token_expired'], $e->getStatusCode());
-
-    } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-        return response()->json(['token_invalid'], $e->getStatusCode());
-
-    } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-        return response()->json(['token_absent'], $e->getStatusCode());
-
-    }
+			
+				$user = $this->getAuthenticatedUser();
 				$user->name = $request->name;
 
 				if($request->email){
@@ -85,21 +84,24 @@ class UserApiController extends Controller
 				}		
 
 			$user->save();
-			return response($user,200)->header("Content-Type","application/json");
+			return response()->json($user,200);
 	}
-	public function destroy($id){
+	public function destroy(Request $request){
 
-		$user = User::find($id);
+		$user = $this->getAuthenticatedUser();
 		if($user != null){
 			$user->delete($id);
-			return response($user,200)->header("Content-Type","application/json");
+			return response()->json($user,200);
 		}else{
-			return response(array("errors" => ["no user found with that id, nothing got deleted"]),404)->header("Content-Type","application/json");
+			return response()->json(array("errors" => ["no user found with that id, nothing got deleted"]),404);
 		}
 
-		
-
-
-
 	}
+public function getAuthenticatedUser()
+{
+
+ $user = User::find(1)->first();
+
+ return $user;
+}
 }

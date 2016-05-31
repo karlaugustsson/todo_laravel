@@ -22,12 +22,12 @@ Route::group(array('prefix' => 'api/v1/'), function()
 		Route::post("login" ,"ApiUserLogin@login");
 
 
-		Route::get('users/{sort?}', "UserApiController@index");
+		Route::get('users/{sort?}/{limit?}/{offset?}', "UserApiController@index");
 		Route::get('user/{id}/',"UserApiController@show");
    		
    		Route::post('user',"UserApiController@store");
    		Route::patch('user',"UserApiController@update");
-   		Route::delete('user/{id}',"UserApiController@destroy");
+   		Route::delete('user',"UserApiController@destroy");
 
 	});
 
