@@ -14,4 +14,5 @@ class Schema extends Model
     protected $hidden = [
         'user_id'
     ];
+    
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSchemaTable extends Migration
+class CreateSchemaBlocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,15 @@ class CreateSchemaTable extends Migration
      */
     public function up()
     {
-        Schema::create("schemas" ,function( Blueprint $table ){
-            $table->increments('id');
-            $table->string("name");
+        Schema::create("schema_blocks",function($table){
+            $table->increments("id");
+            $table->integer("schema_id")->unsigned()->nullable();
+            $table->string("name")->nullable();
             $table->string("desc")->nullable();
             $table->timestamps();
-            $table->integer("user_id")->unsigned();
-            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
-            $table->index("user_id");
+
+            $table->foreign("schema_id")->references("id")->on("schemas")->onDelete("cascade");
+
         });
     }
 
@@ -30,6 +31,6 @@ class CreateSchemaTable extends Migration
      */
     public function down()
     {
-    Schema::drop('schemas');
+        Schema::drop("schema_blocks");
     }
 }
