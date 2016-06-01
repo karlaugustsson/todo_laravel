@@ -12,6 +12,8 @@ use App\Schema;
 
 
 
+
+
 class ApiSubscribeSchemaController extends Controller
 {
 	public function __construct(){

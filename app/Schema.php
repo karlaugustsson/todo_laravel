@@ -11,6 +11,10 @@ class Schema extends Model
     public function subscribed_users(){
         return $this->belongsToMany('App\User');
     }
+
+    public function schema_block(){
+    	return $this->hasMany('App\SchemaBlock');
+    }
     protected $hidden = [
         'user_id'
     ];

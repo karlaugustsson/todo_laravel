@@ -15,7 +15,7 @@ class UserValidation
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $rules = [
             'name' => "required|min:3|max:40",

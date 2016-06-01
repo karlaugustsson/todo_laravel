@@ -30,6 +30,9 @@ class User extends Authenticatable
     public function subscribed_schemas(){
         return $this->belongsToMany('App\Schema');
     }
+    public function schema_blocks(){
+        return $this->BelongsToMany("App\SchemaBlock");
+    }
     public function isAdmin()
     {
         return ($this->admin);

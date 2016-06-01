@@ -32,8 +32,14 @@ Route::group(array('prefix' => 'api/v1/'), function()
 		Route::get("admin/schema/{schema_id}/add/user/{user_id}" ,"ApiSubscribeSchemaController@add_user_to_schema" );
 		Route::get("admin/schema/{schema_id}/remove/user/{user_id}" ,"ApiSubscribeSchemaController@remove_user_to_schema" );
 
-		Route::post("admin/schema/{schema_id}/new_time_block","ApiSchemaBlock@store");
+		Route::post("admin/schema/{schema_id}/schema_block","ApiSchemaBlock@store");
+
+
+		Route::delete("admin/schema/schema_block/{block_id}","ApiSchemaBlock@destroy");
+		Route::patch("admin/schema/schema_block/{block_id}","ApiSchemaBlock@update");
 		
+		Route::get("admin/schema/schema_block/{id}/user/{user_id}" , "ApiSchemaBlock@add_user_to_schema_block");
+		Route::delete("admin/schema/schema_block/{id}/user/{user_id}" , "ApiSchemaBlock@remove_user_from_schema_block");
 
 
 		Route::get("user/schemas/{sort?}/{limit?}/{offset?}" , "ApiSubscribeSchemaController@index");

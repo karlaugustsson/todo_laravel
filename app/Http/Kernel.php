@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
         'user_validation' => 'App\Http\Middleware\UserValidation',
         'user_auth' => 'App\Http\Middleware\UserAuth',
         'admin_auth' => 'App\Http\Middleware\AdminAuth',
+        'schema_block_auth' => 'App\Http\Middleware\ValidationSchemaBlock',
         'schema_validation' => 'App\Http\Middleware\SchemaValidation',
         'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
         'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
