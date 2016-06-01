@@ -17,6 +17,8 @@ class CreateSchemaBlocksTable extends Migration
             $table->integer("schema_id")->unsigned()->nullable();
             $table->string("name")->nullable();
             $table->string("desc")->nullable();
+            $table->timestamp("start_time");
+            $table->timestamp("end_time");
             $table->timestamps();
 
             $table->foreign("schema_id")->references("id")->on("schemas")->onDelete("cascade");
