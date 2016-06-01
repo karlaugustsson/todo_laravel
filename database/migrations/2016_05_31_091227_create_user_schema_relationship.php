@@ -29,6 +29,6 @@ class CreateUserSchemaRelationship extends Migration
      */
     public function down()
     {
-        Schema::drop('user_schemas');
+        Schema::drop('schema_user');
     }
 }
