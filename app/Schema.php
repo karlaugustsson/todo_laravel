@@ -12,7 +12,7 @@ class Schema extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function schema_block(){
+    public function schema_blocks(){
     	return $this->hasMany('App\SchemaBlock');
     }
     protected $hidden = [

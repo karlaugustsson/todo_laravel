@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\User;
 use JWTAuth;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\ApiResponseController;
 
 
 class ApiUserLogin extends Controller
@@ -17,9 +17,9 @@ class ApiUserLogin extends Controller
    	
 
    		if(! $token = JWTAuth::attempt($crendetials)){
-   			return response()->json(['errors' => ['invalid_credentials']], 401);
+   			return ApiResponseController::response(['errors' => ['invalid_credentials']], 401);
    		}
 
-   	return response()->json(compact('token'));
+   	return ApiResponseController::response(compact('token'));
    }
 }

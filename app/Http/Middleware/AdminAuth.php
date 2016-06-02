@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\User;
+use App\Http\Controllers\ApiResponseController;
 class AdminAuth
 {
     /**
@@ -17,12 +18,12 @@ class AdminAuth
     {
         if( ! $user = User::find(1) ){
         
-        return response()->json(["error" =>"Couldnt find the auth user"],404);
+        return ApiResponseController::response(["error" =>"Couldnt find the auth user"],404);
             
         }
         if(!$user->isAdmin()){
 
-            return response()->json(["error" =>"User has to be admin"],404);
+            return ApiResponseController::response(["error" =>"User has to be admin"],404);
         }
     
         return $next($request);

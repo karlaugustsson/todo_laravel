@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Validator;
+use App\Http\Controllers\ApiResponseController;
 class ValidationSchemaBlock
 {
     /**
@@ -30,7 +31,7 @@ class ValidationSchemaBlock
 
         if($validator->fails()){
             
-            return response()->json(array("errors" => $validator->messages()->all()),404);
+            return ApiResponseController::response(["Errors" => $validator->messages()->all()],404);
         }
 
         return $next($request);

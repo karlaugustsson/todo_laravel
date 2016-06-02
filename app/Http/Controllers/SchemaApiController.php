@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Schema;
-
+use App\Http\Controllers\ApiResponseController;
 class SchemaApiController extends Controller
 {
 
 
 	public function __construct(){
 	$this->middleware("schema_validation" , ["only" => ["update","store"]]);
-    $this->middleware("admin_auth" , ["except" => "show"]); 
+    $this->middleware("admin_auth" , ["except" => "show","list_schema_subscribers" , "get_schema_subscriber"]); 
     
 
 	}
@@ -47,12 +47,12 @@ class SchemaApiController extends Controller
 
 
     		if ( $schemas->count() === 0 ){
-    			return response()->json([],404);
+    			return ApiResponseController::response(["message" => "No Schemas found"],404);
     		}
             foreach ($schemas as $schema) {
                 $schema->creator = $schema->user()->select("name")->get();
             }
-    		return response()->json($schemas,200);
+    		return ApiResponseController::response($schemas,200);
     }
     public function show($id){
 
@@ -61,10 +61,11 @@ class SchemaApiController extends Controller
 
     	
     	if ( !$schema ){
-    			return response()->json(["message"=>"found no schema"],404);
+    	   return ApiResponseController::response(["message"=>"found no schema"],404);
     	}
+
         $schema->creator = $schema->user()->select("name")->get();
-    	return response()->json($schema,200);
+    	return ApiResponseController::response($schema,200);
     }
     public function update(Request $request,$id){
 
@@ -77,10 +78,10 @@ class SchemaApiController extends Controller
 	   		$schema->name = $request->name;
 	     	$schema->save();
 
-	     	return response()->json($schema,200);
+	     	return ApiResponseController::response($schema,200);
 
     	}
-    	return response(["error" => "no schema of yours was found nothing edited"] , 404);
+    	return ApiResponseController::response(["Errors" => "no schema of yours was found nothing edited"] , 404);
 
     }
 
@@ -89,10 +90,10 @@ class SchemaApiController extends Controller
     	$schema = $user->schemas()->find($id);
     	
         if(!$schema){
-    		return response(["message" => "schema of your not found ,nothing deleted"] , 404);
+    		return ApiResponseController::response(["message" => "schema of your not found ,nothing deleted"] , 404);
     	}
         $schema->delete();
-    	return response($schema,200);
+    	return ApiResponseController::response($schema,200);
 
     }
 
@@ -104,11 +105,48 @@ class SchemaApiController extends Controller
 
     	$schema->name = $request->name;
     	$schema->user()->associate($user);
+        
+        if($request->desc){
+            $schema->desc = $request->desc;
+        }
     	$schema->save();
 
-    	return response()->json($schema , 200);
+    	return ApiResponseController::response($schema , 200);
 
     	
+    }
+
+    public function list_schema_subscribers($id){
+        $schema = Schema::find($id);
+        
+        if(!$schema){
+            return ApiResponseController::response(["Errors"=>"schema not found"],404);
+        }
+        $subscriber_users = $schema->subscribed_users()->get();
+
+        return ApiResponseController::response($subscriber_users,200);
+    }
+    public function get_schema_subscriber($id,$user_id){
+
+        $schema = Schema::find($id);
+        $error_array = [["Erorrs"]]
+        
+        if ( !$schema ){
+            array_push($error_array["Errors"],"No schema was found");
+        }
+
+        $subscriber_user = $schema->subscribed_users($user_id)->find($user_id);
+
+        if ( !$subscriber_user ){
+            array_push($error_array["Errors"],"The subscriber user was not found");
+        }
+
+        if ( count($error_array["Errors"]) != 0 ){
+            return ApiResponseController::response($error_array["Errors"]);
+        }
+
+
+        return ApiResponseController::response($subscriber_user,200);
     }
 
 }

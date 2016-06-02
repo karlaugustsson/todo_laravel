@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\User;
+use App\Http\Controllers\ApiResponseController;
 class UserAuth
 {
     /**
@@ -17,7 +18,7 @@ class UserAuth
     {
         if( !User::find(1) ){
         
-        return response()->json("Couldnt find the auth user",404);
+        return ApiResponseController::response("Couldnt find the auth user",404);
             
         }
         return $next($request);

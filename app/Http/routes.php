@@ -34,7 +34,7 @@ Route::group(array('prefix' => 'api/v1/'), function()
 
 		Route::post("admin/schema/{schema_id}/schema_block","ApiSchemaBlock@store");
 
-
+		
 		Route::delete("admin/schema/schema_block/{block_id}","ApiSchemaBlock@destroy");
 		Route::patch("admin/schema/schema_block/{block_id}","ApiSchemaBlock@update");
 		
@@ -57,6 +57,9 @@ Route::group(array('prefix' => 'api/v1/'), function()
    		Route::patch('user',"UserApiController@update");
    		Route::delete('user',"UserApiController@destroy");
 
+   		Route::get("schema/{id}/users" ,"SchemaApiController@list_schema_subscribers" );
+   		Route::get("schema/{id}/user/{user_id}" ,"SchemaApiController@get_schema_subscriber" );
+   		Route::get("schema/{schema_id}/schema_blocks/","ApiSchemaBlock@index");
 
 
 	});

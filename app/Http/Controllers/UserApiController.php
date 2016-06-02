@@ -9,6 +9,7 @@ use App\Http\Controllers\Route;
 use App\User;
 use Illuminate\Http\Response;
 use App\Http\Controllers\UserAuth;
+use App\Http\Controllers\ApiResponseController;
 use JWTAuth;
 
 class UserApiController extends Controller
@@ -21,7 +22,7 @@ class UserApiController extends Controller
         $this->middleware("user_auth");	
 	}
 
-	public function index(Request $request , $sort = null, $limit = null , $offset = null){
+	public function index( $sort = null, $limit = null , $offset = null){
 			
 			if($sort != null && strtoupper($sort) == "ASC" || strtoupper($sort) == "DESC"){
 		
@@ -44,32 +45,32 @@ class UserApiController extends Controller
 			}else{
 				$users = User::all();
 			}
+			if ( !$users ){
 
+				return ApiResponseController::response(["message" => "no users was found duh"],404);
+			}
 
- 			return response($users,200)->header("Content-Type","application/json");
+			return ApiResponseController::response($users,200);
 
 	}
-	public function show(Request $request , $id){
+	public function show($id){
 
 		$user = User::find($id);
 
-		if( $user ){
-			
-			return response()->json($user,200);	
+		if ( !$user ){
+			return ApiResponseController::response(["Errors" => "No user with provided id was found"],404);
 		}
+		return ApiResponseController::response($user,200);	
 		
-		return response()->json(["errors" => "No user with provided id was found"],404);
-
 	}
 
 	public function store(Request $request){
 		
 		$user = new User($request->all());
 		$user->password = bcrypt($request->password);
-
-	
 		$user->save();
-		return response($user,200)->header("Content-type","text/json");	
+
+		return ApiResponseController::response($user,200);	
 
 	}
 
@@ -89,7 +90,7 @@ class UserApiController extends Controller
 				}		
 
 			$user->save();
-			return response()->json($user,200);
+			return ApiResponseController::response($user,200);
 	}
 	public function destroy(Request $request){
 
@@ -98,7 +99,7 @@ class UserApiController extends Controller
 
 		$user->delete();
 
-		return response()->json($user,200);
+		return ApiResponseController::response($user,200);
 		}
 
 }

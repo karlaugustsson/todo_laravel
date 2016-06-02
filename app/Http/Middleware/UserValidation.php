@@ -6,6 +6,7 @@ use Closure;
 use App\Http\Requests\Request;
 use Validator;
 use Illuminate\Http\Response;
+use App\Http\Controllers\ApiResponseController;
 class UserValidation
 {
     /**
@@ -35,7 +36,7 @@ class UserValidation
 
         if($validator->fails()){
             
-            return response(array("errors" => $validator->messages()->all()),404)->header("Content-Type" , "application/json");
+            return ApiResponseController::response(["errors" => $validator->messages()->all()],404);
         }
 
         return $next($request);
