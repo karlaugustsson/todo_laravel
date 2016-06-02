@@ -50,7 +50,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'user_validation' => 'App\Http\Middleware\UserValidation',
-        'user_auth' => 'App\Http\Middleware\UserAuth',
+        'user_auth' => 'App\Http\Middleware\GetAuthUser',
         'admin_auth' => 'App\Http\Middleware\AdminAuth',
         'schema_block_validation' => 'App\Http\Middleware\ValidationSchemaBlock',
         'schema_validation' => 'App\Http\Middleware\SchemaValidation',

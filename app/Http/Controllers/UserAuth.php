@@ -13,14 +13,12 @@ class UserAuth extends Controller
   public static function getAuthenticatedUser()
 {
 
-		if( !$user = User::find(1) ){
-		
-		return ApiResponseController::response("Couldnt find the auth user , by the way not final method bitch here goes the jwt",404);
-			
-		}
+        if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return ApiResponseController::response(['Errors' => 'user not found'], 404);
+        }
 
 
- 		return $user->first();
+ 		return $user;
 }
 
 }

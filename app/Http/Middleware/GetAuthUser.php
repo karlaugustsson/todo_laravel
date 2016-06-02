@@ -16,7 +16,7 @@ class GetAuthUser
      */
     public function handle($request, Closure $next)
     {
-        if (! $user = JWTAuth::parseToken()->authenticate()) {
+        if (! UserAuth::getAuthenticatedUser()) {
                 return ApiResponseController::response(['Errors' => 'user not found'], 404);
         }
         return $next($request);

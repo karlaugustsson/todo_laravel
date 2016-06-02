@@ -14,8 +14,8 @@ class SchemaApiController extends Controller
 
 	public function __construct(){
 	$this->middleware("schema_validation" , ["only" => ["update","store"]]);
-    $this->middleware("admin_auth" , ["except" => ["show","list_schema_subscribers" , "get_schema_subscriber"]]);
-    $this->middleware("user_auth" , ["only" => ["show","list_schema_subscribers" , "get_schema_subscriber"]]) ;
+    $this->middleware("admin_auth" , ["except" => ["index","show","list_schema_subscribers" , "get_schema_subscriber"]]);
+    $this->middleware("user_auth" , ["only" => ["index","show","list_schema_subscribers" , "get_schema_subscriber"]]) ;
     
 
 	}
@@ -26,7 +26,7 @@ class SchemaApiController extends Controller
     		
 		if ( $sort != null && strtoupper($sort) == "ASC" || strtoupper($sort) == "DESC"){
 		
-			$schemas = $user->schemas()->orderBy('id' ,$sort);
+			$schemas = Schema::all()->orderBy('id' ,$sort);
 				
 			if( $limit != null ){
 
@@ -42,17 +42,17 @@ class SchemaApiController extends Controller
 
 		
 			}else{
-				$schemas = $user->schemas()->get();
+				$schemas = Schema::all();
 			}
-
-
 
     		if ( $schemas->count() === 0 ){
     			return ApiResponseController::response(["message" => "No Schemas found"],404);
     		}
+
             foreach ($schemas as $schema) {
                 $schema->creator = $schema->user()->select("name")->get();
             }
+
     		return ApiResponseController::response($schemas,200);
     }
     public function show($id){
@@ -148,6 +148,42 @@ class SchemaApiController extends Controller
 
 
         return ApiResponseController::response($subscriber_user,200);
+    }
+
+    public function get_admin_schemas($sort = null ,$limit = null , $offset = null){
+        
+        $user = UserAuth::getAuthenticatedUser();
+            
+        if ( $sort != null && strtoupper($sort) == "ASC" || strtoupper($sort) == "DESC"){
+        
+            $schemas = $user->schemas()->orderBy('id' ,$sort);
+                
+            if( $limit != null ){
+
+                $schemas->take((int) $limit);
+                
+            }
+            if( $offset != null ){
+
+                $schemas->skip((int) $offset);
+                
+            }
+            $schemas = $schemas->get();
+
+        
+            }else{
+                $schemas = $user->schemas()->get();
+            }
+
+
+
+            if ( $schemas->count() === 0 ){
+                return ApiResponseController::response(["message" => "No Schemas found"],404);
+            }
+            foreach ($schemas as $schema) {
+                $schema->creator = $schema->user()->select("name")->get();
+            }
+            return ApiResponseController::response($schemas,200);
     }
 
 }

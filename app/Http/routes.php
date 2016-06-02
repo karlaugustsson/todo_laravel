@@ -19,11 +19,15 @@ use App\User;
 Route::group(array('prefix' => 'api/v1/'), function()
     {
 
+    	// as of now only users can delete them self
+
+    	// in future admin should be able to delete users and change them
+
 		Route::post("authorize" ,"ApiUserLogin@login");
 		
-		Route::get("admin/schemas/{sort?}/{limit?}/{offset?}" , "SchemaApiController@index");
 		
 		
+		Route::get("admin/schemas/{sort?}/{limit?}/{offset?}" , "SchemaApiController@get_admin_schemas");
 		Route::post("admin/schema" , "SchemaApiController@store");
 		Route::patch("admin/schema/{id}" , "SchemaApiController@update");
 		Route::delete("admin/schema/{id}" , "SchemaApiController@destroy");
@@ -56,7 +60,8 @@ Route::group(array('prefix' => 'api/v1/'), function()
    		Route::post('user',"UserApiController@store");
    		Route::patch('user',"UserApiController@update");
    		Route::delete('user',"UserApiController@destroy");
-   		
+
+   		Route::get("schemas/{sort?}/{limit?}/{offset?}" , "SchemaApiController@index");
    		Route::get("schema/{id}" , "SchemaApiController@show");	
    		Route::get("schema/{id}/users" ,"SchemaApiController@list_schema_subscribers" );
    		Route::get("schema/{id}/user/{user_id}" ,"SchemaApiController@get_schema_subscriber" );

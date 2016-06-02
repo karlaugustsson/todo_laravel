@@ -16,11 +16,10 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {
-        if( ! $user = User::find(1) ){
-        
-        return ApiResponseController::response(["error" =>"Couldnt find the auth user"],404);
-            
+        if (! $user = UserAuth::getAuthenticatedUser()) {
+                return ApiResponseController::response(['Errors' => 'user not found'], 404);
         }
+        
         if(!$user->isAdmin()){
 
             return ApiResponseController::response(["error" =>"User has to be admin"],404);
