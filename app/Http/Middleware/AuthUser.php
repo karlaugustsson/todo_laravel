@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\User;
-use App\Http\Controllers\ApiResponseController;
-class AdminAuth
+use App\Http\Controllers\UserAuth;
+class AuthUser
 {
     /**
      * Handle an incoming request.
@@ -16,15 +15,9 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {
-        if (! $user = UserAuth::getAuthenticatedUser()) {
+        if (! UserAuth::getAuthenticatedUser()) {
                 return ApiResponseController::response(['Errors' => 'user not found'], 404);
         }
-        
-        if(!$user->isAdmin()){
-
-            return ApiResponseController::response(["error" =>"User has to be admin"],404);
-        }
-    
         return $next($request);
     }
 }

@@ -7,7 +7,8 @@ use Exception;
 use App\Http\Requests;
 use App\User;
 use App\Http\Controllers\ApiResponseController;
-
+use Tymon\JWTAuth\Exceptions\JWTException;
+use JWTAuth;
 class UserAuth extends Controller
 {
   public static function getAuthenticatedUser()

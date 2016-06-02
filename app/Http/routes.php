@@ -21,7 +21,7 @@ Route::group(array('prefix' => 'api/v1/'), function()
 
     	// as of now only users can delete them self
 
-    	// in future admin should be able to delete users and change them
+    	// in future admin should be able to delete users and change them , to admin perhaps 
 
 		Route::post("authorize" ,"ApiUserLogin@login");
 		
