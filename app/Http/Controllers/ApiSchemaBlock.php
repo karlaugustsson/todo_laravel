@@ -14,7 +14,9 @@ use App\User;
 class ApiSchemaBlock extends Controller
 {
    public function __construct(){
-      $this->middleware("schema_block_auth" ,["only" => ["store"]]);
+      $this->middleware("schema_block_validation" ,["only" => ["store" , "update"]]);
+      $this->middleware("admin_auth" , [ "only" => ["destroy","update","add_user_to_schema_block" , "remove_user_from_schema_block"]]);
+      $this->middleware("user_auth" ,[ "only" => ["index"] ]);
    }
    public function index($id){
 

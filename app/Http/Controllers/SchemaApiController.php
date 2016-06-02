@@ -14,7 +14,8 @@ class SchemaApiController extends Controller
 
 	public function __construct(){
 	$this->middleware("schema_validation" , ["only" => ["update","store"]]);
-    $this->middleware("admin_auth" , ["except" => "show","list_schema_subscribers" , "get_schema_subscriber"]); 
+    $this->middleware("admin_auth" , ["except" => ["show","list_schema_subscribers" , "get_schema_subscriber"]]);
+    $this->middleware("user_auth" , ["only" => ["show","list_schema_subscribers" , "get_schema_subscriber"]]) ;
     
 
 	}
@@ -129,7 +130,7 @@ class SchemaApiController extends Controller
     public function get_schema_subscriber($id,$user_id){
 
         $schema = Schema::find($id);
-        $error_array = [["Erorrs"]]
+        $error_array = [["Erorrs"]];
         
         if ( !$schema ){
             array_push($error_array["Errors"],"No schema was found");

@@ -22,7 +22,7 @@ Route::group(array('prefix' => 'api/v1/'), function()
 		Route::post("authorize" ,"ApiUserLogin@login");
 		
 		Route::get("admin/schemas/{sort?}/{limit?}/{offset?}" , "SchemaApiController@index");
-		Route::get("admin/schema/{id}" , "SchemaApiController@show");	
+		
 		
 		Route::post("admin/schema" , "SchemaApiController@store");
 		Route::patch("admin/schema/{id}" , "SchemaApiController@update");
@@ -43,7 +43,7 @@ Route::group(array('prefix' => 'api/v1/'), function()
 
 
 		Route::get("user/schemas/{sort?}/{limit?}/{offset?}" , "ApiSubscribeSchemaController@index");
-		Route::get("user/schema/{id}" , "SchemaApiController@show");
+		
 		
 		Route::get("user/schema/subscribe/{id}" ,"ApiSubscribeSchemaController@store" );
 		Route::get("user/schema/unsubscribe/{id}" ,"ApiSubscribeSchemaController@destroy" );
@@ -56,7 +56,8 @@ Route::group(array('prefix' => 'api/v1/'), function()
    		Route::post('user',"UserApiController@store");
    		Route::patch('user',"UserApiController@update");
    		Route::delete('user',"UserApiController@destroy");
-
+   		
+   		Route::get("schema/{id}" , "SchemaApiController@show");	
    		Route::get("schema/{id}/users" ,"SchemaApiController@list_schema_subscribers" );
    		Route::get("schema/{id}/user/{user_id}" ,"SchemaApiController@get_schema_subscriber" );
    		Route::get("schema/{schema_id}/schema_blocks/","ApiSchemaBlock@index");
