@@ -41,13 +41,8 @@ class ApiSchemaBlock extends Controller
          if(!$user){
          return ApiResponseController::response(array("Errors" => ["User nor found"]),400);
          }
-         $schema_blocks = $schema->schema_blocks()->whereBetween("start_time",array($start_date,$end_date))->get();
-         foreach ($schema_blocks as $id=>$schemaBlock) {
-          if(!$schemaBlock->user($user)->find($user->id)){
-            unset($schema_blocks[$id]);
-         }
-        }
-
+         $schema_blocks = $schema->schema_blocks()->whereBetween("start_time",array($start_date,$end_date))->has("user" ,$user->id )->get();
+        
          }else{
           $schema_blocks = $schema->schema_blocks()->whereBetween("start_time",array($start_date,$end_date))->get();         
          }
