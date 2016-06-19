@@ -18,17 +18,40 @@ class ApiSchemaBlock extends Controller
       $this->middleware("admin_auth" , [ "only" => ["destroy","update","add_user_to_schema_block" , "remove_user_from_schema_block"]]);
       $this->middleware("user_auth" ,[ "only" => ["index"] ]);
    }
-   public function index($id){
+   public function index($id,$start_date,$end_date , $user = null ){
+         $start_date = date($start_date);
+         $end_date = date($end_date);
+         $error = array(array("Error"));
+         if($start_date && $end_date){
 
+         }else{
+            array_push($error["Error"], "invalid date or dates given"); 
+         }
          //todo filter active or by week asc desc
          $schema  = Schema::find($id);
-
-         if (!$schema){
-            return ApiResponseController::response([ "Errors" =>"no schema found" ],404);
+         if(!$schema){
+             array_push($error["Error"], "Schema was not found"); 
+         }
+         if (! empty($error["Error"])){
+            return ApiResponseController::response($error["Error"],400);
       
          }
+         if($user){
+         $user = User::find($user);
+         if(!$user){
+         return ApiResponseController::response(array("Errors" => ["User nor found"]),400);
+         }
+         $schema_blocks = $schema->schema_blocks()->whereBetween("start_time",array($start_date,$end_date))->get();
+         foreach ($schema_blocks as $id=>$schemaBlock) {
+          if(!$schemaBlock->user($user)->find($user->id)){
+            unset($schema_blocks[$id]);
+         }
+        }
 
-         $schema_blocks = $schema->schema_blocks()->get();
+         }else{
+          $schema_blocks = $schema->schema_blocks()->whereBetween("start_time",array($start_date,$end_date))->get();         
+         }
+
          return ApiResponseController::response($schema_blocks,200);
    }
    public function store(Request $request,$id){

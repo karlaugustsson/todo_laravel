@@ -50,6 +50,8 @@ class SchemaApiController extends Controller
     		}
 
             foreach ($schemas as $schema) {
+                $is_subscribed = ($schema->subscribed_users()->find($user->id))?true:false;
+                $schema->is_subscriber = $is_subscribed;
                 $schema->creator = $schema->user()->select("name")->get();
             }
 
@@ -93,8 +95,9 @@ class SchemaApiController extends Controller
         if(!$schema){
     		return ApiResponseController::response(["message" => "schema of your not found ,nothing deleted"] , 404);
     	}
+        return ApiResponseController::response($schema,200);
         $schema->delete();
-    	return ApiResponseController::response($schema,200);
+    	
 
     }
 

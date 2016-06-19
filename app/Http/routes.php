@@ -65,7 +65,8 @@ Route::group(array('prefix' => 'api/v1/'), function()
    		Route::get("schema/{id}" , "SchemaApiController@show");	
    		Route::get("schema/{id}/users" ,"SchemaApiController@list_schema_subscribers" );
    		Route::get("schema/{id}/user/{user_id}" ,"SchemaApiController@get_schema_subscriber" );
-   		Route::get("schema/{schema_id}/schema_blocks/","ApiSchemaBlock@index");
+   		Route::get("schema/{schema_id}/schema_blocks/between/{start_date}/and/{end_date}/user/{user?}","ApiSchemaBlock@index");
+   		Route::get("schema/{schema_id}/schema_blocks/between/{start_date}/and/{end_date}","ApiSchemaBlock@index");
 
 
 	});

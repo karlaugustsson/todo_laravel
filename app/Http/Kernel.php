@@ -44,18 +44,19 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
+        'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',        
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'cors' => \App\Http\Middleware\Cors::class,
         'user_validation' => 'App\Http\Middleware\UserValidation',
         'user_auth' => 'App\Http\Middleware\AuthUser',
         'admin_auth' => 'App\Http\Middleware\AuthAdmin',
         'schema_block_validation' => 'App\Http\Middleware\ValidationSchemaBlock',
         'schema_validation' => 'App\Http\Middleware\SchemaValidation',
-        'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
-        'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
 
     ];
 }

@@ -15,11 +15,11 @@ use JWTAuth;
 class UserApiController extends Controller
 {
 	public function __construct(){
-		//$this->middleware(["jwt.auth","jwt.refresh"] ,["except" => "store"]);
+		$this->middleware(["jwt.auth","jwt.refresh"] ,["except" => "store"]);
 
 		$this->middleware("user_validation" , ["only" => ["update","store"]]);
         
-        $this->middleware("user_auth");	
+        //$this->middleware("user_auth");	
 	}
 
 	public function index( $sort = null, $limit = null , $offset = null){

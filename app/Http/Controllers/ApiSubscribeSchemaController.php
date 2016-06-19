@@ -46,9 +46,13 @@ class ApiSubscribeSchemaController extends Controller
 			}
 
 		if ( $schemas->count() == 0 ){
-			return ApiResponseController::response(["message" => "you have no subscription to any schemas"]);
+			return ApiResponseController::response(["message" => "you have no subscription to any schemas"],404);
 		}
-
+		foreach ($schemas as $schema) {
+        	$is_subscribed = ($schema->subscribed_users()->find($user->id))?true:false;
+        	$schema->is_subscriber = $is_subscribed;
+        	$schema->creator = $schema->user()->select("name")->get();
+        }
 		return ApiResponseController::response($schemas,200);
 	}
 
@@ -80,7 +84,7 @@ class ApiSubscribeSchemaController extends Controller
 		}
 
 		$user->subscribed_schemas()->detach($schema);
-		return ApiResponseController::response(null,204);
+		return ApiResponseController::response($schema,200);
 	}
 	public function add_user_to_schema($schema_id,$user_id){
 
